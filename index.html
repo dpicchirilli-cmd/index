@@ -1,213 +1,355 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio BTS SIO SISR - Damien Picchirilli</title>
+    <title>Damien Picchirilli — Portfolio BTS SIO SISR</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
-        // Fonction pour basculer d'une page/onglet à l'autre
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+
         function showPage(pageId) {
-            // Masquer toutes les sections
             document.querySelectorAll('.tab-content').forEach(section => {
                 section.classList.add('hidden');
+                section.classList.remove('animate-fadeIn');
             });
-            // Afficher la section demandée
+
             const target = document.getElementById(pageId);
             if (target) {
                 target.classList.remove('hidden');
+                void target.offsetWidth;
+                target.classList.add('animate-fadeIn');
             }
 
-            // Mettre à jour les classes actives du menu desktop
+            // Desktop nav
             document.querySelectorAll('.nav-link').forEach(link => {
-                link.classList.remove('text-amber-500', 'font-semibold');
-                link.classList.add('text-gray-600');
+                link.classList.remove('bg-slate-900', 'text-white', 'shadow-sm');
+                link.classList.add('text-slate-600', 'hover:text-slate-900', 'hover:bg-slate-100/80');
             });
-            const activeLinkDesktop = document.getElementById('link-' + pageId);
-            if (activeLinkDesktop) {
-                activeLinkDesktop.classList.remove('text-gray-600');
-                activeLinkDesktop.classList.add('text-amber-500', 'font-semibold');
+            const activeDesktop = document.getElementById('link-' + pageId);
+            if (activeDesktop) {
+                activeDesktop.classList.remove('text-slate-600', 'hover:text-slate-900', 'hover:bg-slate-100/80');
+                activeDesktop.classList.add('bg-slate-900', 'text-white', 'shadow-sm');
             }
 
-            // Mettre à jour les classes actives du menu mobile
+            // Mobile nav
             document.querySelectorAll('.nav-link-mobile').forEach(link => {
-                link.classList.remove('text-amber-500', 'font-semibold');
-                link.classList.add('text-gray-600');
+                link.classList.remove('bg-amber-500/10', 'text-amber-600', 'font-semibold');
+                link.classList.add('text-slate-600');
             });
-            const activeLinkMobile = document.getElementById('link-mobile-' + pageId);
-            if (activeLinkMobile) {
-                activeLinkMobile.classList.remove('text-gray-600');
-                activeLinkMobile.classList.add('text-amber-500', 'font-semibold');
+            const activeMobile = document.getElementById('link-mobile-' + pageId);
+            if (activeMobile) {
+                activeMobile.classList.remove('text-slate-600');
+                activeMobile.classList.add('bg-amber-500/10', 'text-amber-600', 'font-semibold');
             }
 
-            // Fermer le menu mobile après un clic
             document.getElementById('mobile-menu').classList.add('hidden');
-
-            // Remonter en haut de page en douceur
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fadeIn {
+            animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .bg-grid {
+            background-size: 32px 32px;
+            background-image: radial-gradient(circle, rgba(148, 163, 184, 0.18) 1px, transparent 1px);
+        }
+    </style>
 </head>
-<body class="bg-slate-50 text-gray-800 font-sans leading-relaxed flex flex-col min-h-screen">
+<body class="bg-slate-50 bg-grid text-slate-800 font-sans antialiased flex flex-col min-h-screen selection:bg-amber-500 selection:text-white">
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-md shadow-sm z-50 border-b border-gray-100">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" onclick="event.preventDefault(); showPage('accueil')" class="text-xl font-bold text-gray-900 tracking-wide">Damien<span class="text-amber-500">.P</span></a>
-            <div class="space-x-6 hidden md:flex font-medium text-gray-600">
-                <button onclick="showPage('accueil')" id="link-accueil" class="nav-link text-amber-500 font-semibold transition">Accueil</button>
-                <button onclick="showPage('parcours')" id="link-parcours" class="nav-link hover:text-amber-500 transition">Parcours</button>
-                <button onclick="showPage('projets')" id="link-projets" class="nav-link hover:text-amber-500 transition">Projets E4</button>
-                <button onclick="showPage('competences')" id="link-competences" class="nav-link hover:text-amber-500 transition">Compétences</button>
-                <button onclick="showPage('veille')" id="link-veille" class="nav-link hover:text-amber-500 transition">Veille Tech</button>
-                <button onclick="showPage('contact')" id="link-contact" class="nav-link hover:text-amber-500 transition">Contact</button>
+    <!-- Halo décoratif en arrière-plan -->
+    <div class="fixed inset-x-0 top-0 -z-10 transform-gpu overflow-hidden blur-3xl pointer-events-none" aria-hidden="true">
+        <div class="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-amber-300/30 to-orange-200/20 opacity-60 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"></div>
+    </div>
+
+    <!-- Navigation flottante moderne -->
+    <header class="fixed top-4 inset-x-0 z-50 px-4">
+        <nav class="max-w-5xl mx-auto bg-white/80 backdrop-blur-xl border border-slate-200/80 shadow-lg shadow-slate-200/40 rounded-2xl px-4 py-2.5 flex justify-between items-center">
+            <a href="#" onclick="event.preventDefault(); showPage('accueil')" class="flex items-center gap-2.5 pl-2">
+                <span class="w-8 h-8 rounded-lg bg-slate-900 text-amber-400 font-mono font-bold text-sm flex items-center justify-center shadow-inner">DP</span>
+                <span class="font-bold text-slate-900 tracking-tight">Damien<span class="text-amber-500">.P</span></span>
+            </a>
+
+            <div class="hidden md:flex items-center gap-1 text-sm font-medium">
+                <button onclick="showPage('accueil')" id="link-accueil" class="nav-link bg-slate-900 text-white shadow-sm px-3.5 py-2 rounded-xl transition-all">Accueil</button>
+                <button onclick="showPage('parcours')" id="link-parcours" class="nav-link text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 px-3.5 py-2 rounded-xl transition-all">Parcours</button>
+                <button onclick="showPage('projets')" id="link-projets" class="nav-link text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 px-3.5 py-2 rounded-xl transition-all">Projets E4</button>
+                <button onclick="showPage('competences')" id="link-competences" class="nav-link text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 px-3.5 py-2 rounded-xl transition-all">Compétences</button>
+                <button onclick="showPage('veille')" id="link-veille" class="nav-link text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 px-3.5 py-2 rounded-xl transition-all">Veille Tech</button>
+                <button onclick="showPage('contact')" id="link-contact" class="nav-link text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 px-3.5 py-2 rounded-xl transition-all">Contact</button>
             </div>
-            <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden text-gray-700 text-xl focus:outline-none">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-        </div>
-        <!-- Menu Mobile -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-6 py-4 space-y-3 font-medium text-gray-600">
-            <button onclick="showPage('accueil')" id="link-mobile-accueil" class="nav-link-mobile block w-full text-left text-amber-500 font-semibold">Accueil</button>
-            <button onclick="showPage('parcours')" id="link-mobile-parcours" class="nav-link-mobile block w-full text-left hover:text-amber-500">Parcours</button>
-            <button onclick="showPage('projets')" id="link-mobile-projets" class="nav-link-mobile block w-full text-left hover:text-amber-500">Projets E4</button>
-            <button onclick="showPage('competences')" id="link-mobile-competences" class="nav-link-mobile block w-full text-left hover:text-amber-500">Compétences</button>
-            <button onclick="showPage('veille')" id="link-mobile-veille" class="nav-link-mobile block w-full text-left hover:text-amber-500">Veille Tech</button>
-            <button onclick="showPage('contact')" id="link-mobile-contact" class="nav-link-mobile block w-full text-left hover:text-amber-500">Contact</button>
-        </div>
-    </nav>
 
-    <!-- Contenu dynamique des onglets -->
-    <main class="flex-grow pt-32 pb-20 px-6">
+            <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="md:hidden w-10 h-10 rounded-xl flex items-center justify-center text-slate-700 hover:bg-slate-100 transition">
+                <i class="fa-solid fa-bars text-lg"></i>
+            </button>
+        </nav>
+
+        <!-- Menu Mobile -->
+        <div id="mobile-menu" class="hidden md:hidden max-w-5xl mx-auto mt-2 bg-white/95 backdrop-blur-xl border border-slate-200 shadow-xl rounded-2xl p-3 space-y-1 text-sm font-medium">
+            <button onclick="showPage('accueil')" id="link-mobile-accueil" class="nav-link-mobile block w-full text-left px-4 py-2.5 rounded-xl bg-amber-500/10 text-amber-600 font-semibold">Accueil</button>
+            <button onclick="showPage('parcours')" id="link-mobile-parcours" class="nav-link-mobile block w-full text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50">Parcours</button>
+            <button onclick="showPage('projets')" id="link-mobile-projets" class="nav-link-mobile block w-full text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50">Projets E4</button>
+            <button onclick="showPage('competences')" id="link-mobile-competences" class="nav-link-mobile block w-full text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50">Compétences</button>
+            <button onclick="showPage('veille')" id="link-mobile-veille" class="nav-link-mobile block w-full text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50">Veille Tech</button>
+            <button onclick="showPage('contact')" id="link-mobile-contact" class="nav-link-mobile block w-full text-left px-4 py-2.5 rounded-xl text-slate-600 hover:bg-slate-50">Contact</button>
+        </div>
+    </header>
+
+    <!-- Contenu principal -->
+    <main class="flex-grow pt-32 pb-20 px-4 sm:px-6">
 
         <!-- ONGLET 1 : ACCUEIL -->
-        <div id="accueil" class="tab-content max-w-4xl mx-auto space-y-16">
-            <div class="text-center bg-white p-10 rounded-2xl border border-gray-200 shadow-sm">
-                <span class="text-xs font-semibold uppercase tracking-wider bg-amber-100 text-amber-800 px-3 py-1 rounded-full mb-4 inline-block">Étudiant BTS SIO SISR - 2ᵉ année</span>
-                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">Damien Picchirilli</h1>
-                <p class="text-xl text-amber-600 font-semibold mb-6">Futur Administrateur Systèmes & Réseaux</p>
-                <p class="text-gray-600 max-w-2xl mx-auto mb-8">
-                    Bienvenue sur mon portfolio d'épreuve E4. Vous y trouverez mes réalisations d'infrastructures, mes projets d'apprentissage et ma veille technologique.
-                </p>
-                <div class="flex flex-wrap justify-center gap-4">
-                    <button onclick="showPage('projets')" class="bg-amber-500 text-white font-medium px-6 py-3 rounded-lg shadow-md hover:bg-amber-600 transition">Découvrir mes projets</button>
-                    <a href="Tableau_de_Synthese_E4.pdf" target="_blank" class="bg-emerald-600 text-white font-medium px-6 py-3 rounded-lg shadow-md hover:bg-emerald-700 transition inline-flex items-center">
-                        <i class="fa-solid fa-table mr-2"></i> Tableau de Synthèse E4
-                    </a>
-                    <a href="CV_Damien_Picchirilli.pdf" target="_blank" class="bg-gray-800 text-white font-medium px-6 py-3 rounded-lg shadow-md hover:bg-gray-900 transition inline-flex items-center">
-                        <i class="fa-solid fa-download mr-2"></i> Mon CV
-                    </a>
+        <div id="accueil" class="tab-content animate-fadeIn max-w-5xl mx-auto space-y-8">
+            <!-- Hero Card -->
+            <div class="relative overflow-hidden bg-slate-900 text-white p-8 sm:p-14 rounded-3xl shadow-xl border border-slate-800">
+                <div class="absolute -right-20 -top-20 w-80 h-80 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-20 -bottom-20 w-72 h-72 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="relative z-10 max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/10 text-amber-300 text-xs font-mono mb-6">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        BTS SIO option SISR • 2ᵉ année (2025 – 2027)
+                    </div>
+
+                    <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-4 bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
+                        Damien Picchirilli
+                    </h1>
+
+                    <p class="text-lg sm:text-2xl text-amber-400 font-semibold mb-5">
+                        Futur Administrateur Systèmes & Réseaux
+                    </p>
+
+                    <p class="text-slate-300 text-base sm:text-lg leading-relaxed mb-9 max-w-2xl">
+                        Bienvenue sur mon portfolio dédié à l'épreuve <strong class="text-white">E4</strong>. Explorez mes architectures d'infrastructures, mes mises en production sécurisées et ma veille technologique.
+                    </p>
+
+                    <div class="flex flex-wrap gap-3.5">
+                        <button onclick="showPage('projets')" class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-amber-500/25 transition-all hover:-translate-y-0.5 inline-flex items-center gap-2">
+                            <span>Découvrir mes projets</span>
+                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </button>
+                        <a href="Tableau_de_Synthese_E4.pdf" target="_blank" class="bg-white/10 hover:bg-white/15 text-white border border-white/15 font-semibold px-6 py-3.5 rounded-xl backdrop-blur-sm transition-all hover:-translate-y-0.5 inline-flex items-center gap-2">
+                            <i class="fa-solid fa-table text-emerald-400"></i>
+                            <span>Tableau de Synthèse E4</span>
+                        </a>
+                        <a href="CV_Damien_Picchirilli.pdf" target="_blank" class="bg-white/10 hover:bg-white/15 text-white border border-white/15 font-semibold px-6 py-3.5 rounded-xl backdrop-blur-sm transition-all hover:-translate-y-0.5 inline-flex items-center gap-2">
+                            <i class="fa-solid fa-file-arrow-down text-amber-400"></i>
+                            <span>Mon CV (PDF)</span>
+                        </a>
+                    </div>
                 </div>
             </div>
 
-            <div class="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm max-w-6xl mx-auto">
-                <h2 class="text-3xl font-bold text-gray-900 mb-6 border-l-4 border-amber-500 pl-4">À propos</h2>
-                <p class="text-gray-600 text-lg">
-                    Étudiant en deuxième année de <strong>BTS SIO (Services Informatiques aux Organisations)</strong> option <strong>SISR (Solutions d'Infrastructure, Systèmes et Réseaux)</strong>. Passionné par l'architecture réseau et la gestion des services d'entreprise, je conçois, déploie et sécurise des environnements Linux, Windows Server et équipements Cisco.
-                </p>
+            <!-- Bento Grid À propos & Infos rapides -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-2 bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <span class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-600 flex items-center justify-center">
+                            <i class="fa-solid fa-terminal"></i>
+                        </span>
+                        <h2 class="text-2xl font-bold text-slate-900">À propos de mon profil</h2>
+                    </div>
+                    <p class="text-slate-600 leading-relaxed">
+                        Étudiant en deuxième année de <strong class="text-slate-900">BTS SIO (Services Informatiques aux Organisations)</strong> option <strong class="text-slate-900">SISR (Solutions d'Infrastructure, Systèmes et Réseaux)</strong> au Lycée Gustave Flaubert à Rouen. Passionné par l'architecture réseau et l'administration système, je conçois, déploie et sécurise des environnements Linux, Windows Server et équipements Cisco.
+                    </p>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <span class="text-xs font-mono uppercase tracking-wider text-slate-400">Localisation & Contact</span>
+                        <ul class="mt-4 space-y-3 text-sm text-slate-700">
+                            <li class="flex items-center gap-3">
+                                <i class="fa-solid fa-location-dot text-amber-500 w-4"></i>
+                                <span>Lisors / Rouen (Normandie)</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fa-solid fa-language text-amber-500 w-4"></i>
+                                <span>Français (natif) • Anglais (B1)</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fa-solid fa-heart text-amber-500 w-4"></i>
+                                <span>IT, Montage vidéo, Dressage canin</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button onclick="showPage('contact')" class="mt-6 w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-800 text-sm font-semibold transition">
+                        Me contacter
+                    </button>
+                </div>
             </div>
         </div>
 
         <!-- ONGLET 2 : PARCOURS -->
-        <div id="parcours" class="tab-content hidden max-w-6xl mx-auto">
-            <h2 class="text-3xl font-bold text-gray-900 mb-8 border-l-4 border-amber-500 pl-4">Parcours & Expériences</h2>
-            <div class="space-y-6">
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <div class="flex flex-wrap justify-between items-start mb-2">
-                        <h3 class="text-xl font-bold text-gray-900">Stage — Maintenance informatique</h3>
-                        <span class="text-sm font-semibold bg-amber-100 text-amber-800 px-3 py-1 rounded-full">Mai - Juin 2026</span>
+        <div id="parcours" class="tab-content hidden max-w-4xl mx-auto">
+            <div class="mb-10">
+                <span class="text-xs font-mono uppercase tracking-widest text-amber-600 font-semibold">Expérience & Études</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">Parcours & Formations</h2>
+            </div>
+
+            <div class="relative border-l-2 border-slate-200 ml-3 sm:ml-4 space-y-8">
+                <!-- Expérience Stage -->
+                <div class="relative pl-8">
+                    <span class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-amber-500 ring-4 ring-amber-100"></span>
+                    <div class="bg-white p-6 sm:p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:shadow-md transition">
+                        <div class="flex flex-wrap justify-between items-start gap-2 mb-2">
+                            <div>
+                                <span class="text-xs font-mono font-semibold uppercase text-amber-600">Expérience professionnelle</span>
+                                <h3 class="text-xl font-bold text-slate-900">Stage — Maintenance informatique</h3>
+                            </div>
+                            <span class="text-xs font-mono font-semibold bg-amber-500/10 text-amber-700 px-3 py-1 rounded-full">Mai – Juin 2026</span>
+                        </div>
+                        <p class="text-slate-500 font-medium text-sm mb-4"><i class="fa-solid fa-building mr-1.5 text-slate-400"></i>Alternative PC</p>
+                        <ul class="space-y-2 text-slate-600 text-sm">
+                            <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-amber-500 mt-1"></i><span>Diagnostic et résolution de pannes matérielles.</span></li>
+                            <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-amber-500 mt-1"></i><span>Montage et remplacement de composants.</span></li>
+                            <li class="flex items-start gap-2.5"><i class="fa-solid fa-check text-amber-500 mt-1"></i><span>Suivi de l'état des stocks et mise à jour de l'inventaire.</span></li>
+                        </ul>
                     </div>
-                    <p class="text-gray-500 text-sm mb-3">Alternative PC</p>
-                    <ul class="list-disc list-inside text-gray-600 text-sm space-y-1">
-                        <li>Diagnostic et résolution de pannes matérielles.</li>
-                        <li>Montage et remplacement de composants.</li>
-                        <li>Suivi de l'état des stocks et mise à jour de l'inventaire.</li>
-                    </ul>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <div class="flex flex-wrap justify-between items-start mb-2">
-                        <h3 class="text-xl font-bold text-gray-900">BTS SIO (Services Informatiques aux Organisations)</h3>
-                        <span class="text-sm font-semibold bg-gray-100 text-gray-700 px-3 py-1 rounded-full">2025 - 2027</span>
+                <!-- Formation 1 -->
+                <div class="relative pl-8">
+                    <span class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-slate-800 ring-4 ring-slate-100"></span>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+                        <div class="flex flex-wrap justify-between items-center gap-2 mb-1">
+                            <h3 class="text-lg font-bold text-slate-900">BTS SIO — Option SISR</h3>
+                            <span class="text-xs font-mono font-semibold bg-slate-100 text-slate-700 px-3 py-1 rounded-full">2025 – 2027</span>
+                        </div>
+                        <p class="text-slate-500 text-sm">Lycée Gustave Flaubert — Rouen</p>
                     </div>
-                    <p class="text-gray-500 text-sm">Lycée Gustave Flaubert — Rouen</p>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <div class="flex flex-wrap justify-between items-start mb-2">
-                        <h3 class="text-xl font-bold text-gray-900">Licence IEEEA L1</h3>
-                        <span class="text-sm font-semibold bg-gray-100 text-gray-700 px-3 py-1 rounded-full">2024 - 2025</span>
+                <!-- Formation 2 -->
+                <div class="relative pl-8">
+                    <span class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-slate-400 ring-4 ring-slate-100"></span>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+                        <div class="flex flex-wrap justify-between items-center gap-2 mb-1">
+                            <h3 class="text-lg font-bold text-slate-900">Licence IEEEA L1</h3>
+                            <span class="text-xs font-mono font-semibold bg-slate-100 text-slate-700 px-3 py-1 rounded-full">2024 – 2025</span>
+                        </div>
+                        <p class="text-slate-500 text-sm">Université de Rouen</p>
                     </div>
-                    <p class="text-gray-500 text-sm">Université de Rouen</p>
                 </div>
 
-                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
-                    <div class="flex flex-wrap justify-between items-start mb-2">
-                        <h3 class="text-xl font-bold text-gray-900">Lycée Général</h3>
-                        <span class="text-sm font-semibold bg-gray-100 text-gray-700 px-3 py-1 rounded-full">2021 - 2024</span>
+                <!-- Formation 3 -->
+                <div class="relative pl-8">
+                    <span class="absolute -left-[9px] top-1.5 w-4 h-4 rounded-full bg-slate-400 ring-4 ring-slate-100"></span>
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+                        <div class="flex flex-wrap justify-between items-center gap-2 mb-1">
+                            <h3 class="text-lg font-bold text-slate-900">Lycée Général</h3>
+                            <span class="text-xs font-mono font-semibold bg-slate-100 text-slate-700 px-3 py-1 rounded-full">2021 – 2024</span>
+                        </div>
+                        <p class="text-slate-500 text-sm">Lycée Louise Michel — Gisors</p>
                     </div>
-                    <p class="text-gray-500 text-sm">Lycée Louise Michel — Gisors</p>
                 </div>
             </div>
         </div>
 
         <!-- ONGLET 3 : PROJETS E4 -->
-        <div id="projets" class="tab-content hidden max-w-6xl mx-auto">
-            <h2 class="text-3xl font-bold text-gray-900 mb-2 border-l-4 border-amber-500 pl-4">Réalisations & Projets BTS E4</h2>
-            <p class="text-gray-600 mb-12">Projets pratiques d'infrastructure avec preuves documentées au format PDF.</p>
+        <div id="projets" class="tab-content hidden max-w-5xl mx-auto">
+            <div class="mb-10">
+                <span class="text-xs font-mono uppercase tracking-widest text-amber-600 font-semibold">Portfolio Épreuve E4</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">Réalisations & Projets d'Infrastructure</h2>
+                <p class="text-slate-600 mt-2">Travaux pratiques et déploiements documentés avec preuves techniques au format PDF.</p>
+            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Projet 1 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between hover:shadow-md transition">
+                <div class="group bg-white rounded-3xl border border-slate-200/80 p-7 flex flex-col justify-between shadow-sm hover:shadow-xl hover:border-amber-300 transition-all duration-300 hover:-translate-y-1">
                     <div>
-                        <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-lg flex items-center justify-center text-xl mb-4">
-                            <i class="fa-solid fa-server"></i>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-12 h-12 bg-amber-500/10 text-amber-600 rounded-2xl flex items-center justify-center text-xl group-hover:bg-amber-500 group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-server"></i>
+                            </div>
+                            <span class="text-xs font-mono text-slate-400">01 / SYSTÈME</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Serveur DNS & Certificat SSL</h3>
-                        <p class="text-gray-600 text-sm mb-4">
-                            Installation et configuration de BIND9 sous Debian (<code class="bg-gray-100 px-1 rounded">gp7Sloom.local</code>). Configuration Apache2 avec SSL/TLS (port 443).
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Serveur DNS & Certificat SSL</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-5">
+                            Installation et configuration de BIND9 sous Debian (<code class="font-mono text-xs bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded">gp7Sloom.local</code>). Sécurisation Apache2 avec SSL/TLS sur le port 443.
                         </p>
+                        <div class="flex flex-wrap gap-1.5 mb-6">
+                            <span class="text-xs font-mono bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg">Debian</span>
+                            <span class="text-xs font-mono bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg">BIND9</span>
+                            <span class="text-xs font-mono bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg">HTTPS/TLS</span>
+                        </div>
                     </div>
-                    <div class="pt-4 border-t border-gray-100">
-                        <a href="doc_dnsetcertificatgp8_2.pdf" target="_blank" class="inline-flex items-center text-sm text-amber-600 font-semibold hover:underline">
-                            <i class="fa-solid fa-file-pdf mr-2"></i> Voir la preuve (PDF)
+                    <div class="pt-4 border-t border-slate-100">
+                        <a href="doc_dnsetcertificatgp8_2.pdf" target="_blank" class="inline-flex items-center justify-between w-full text-sm text-slate-900 font-semibold group-hover:text-amber-600 transition">
+                            <span><i class="fa-solid fa-file-pdf text-rose-500 mr-2"></i>Voir la preuve (PDF)</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                         </a>
                     </div>
                 </div>
 
                 <!-- Projet 2 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between hover:shadow-md transition">
+                <div class="group bg-white rounded-3xl border border-slate-200/80 p-7 flex flex-col justify-between shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all duration-300 hover:-translate-y-1">
                     <div>
-                        <div class="w-12 h-12 bg-green-100 text-green-600 rounded-lg flex items-center justify-center text-xl mb-4">
-                            <i class="fa-solid fa-database"></i>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-12 h-12 bg-emerald-500/10 text-emerald-600 rounded-2xl flex items-center justify-center text-xl group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-database"></i>
+                            </div>
+                            <span class="text-xs font-mono text-slate-400">02 / AUTOMATISATION</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Sauvegardes MariaDB Automatisées</h3>
-                        <p class="text-gray-600 text-sm mb-4">
-                            Création de scripts Bash de sauvegarde et planification automatique via <code class="bg-gray-100 px-1 rounded">crontab</code> pour sécuriser les bases SQL.
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Sauvegardes MariaDB Automatisées</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-5">
+                            Développement de scripts Bash de sauvegarde et planification automatique via <code class="font-mono text-xs bg-slate-100 text-slate-800 px-1.5 py-0.5 rounded">crontab</code> pour assurer l'intégrité des bases SQL.
                         </p>
+                        <div class="flex flex-wrap gap-1.5 mb-6">
+                            <span class="text-xs font-mono bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg">MariaDB</span>
+                            <span class="text-xs font-mono bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg">Bash</span>
+                            <span class="text-xs font-mono bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg">Cron</span>
+                        </div>
                     </div>
-                    <div class="pt-4 border-t border-gray-100">
-                        <a href="Fiche%20de%20lecture.pdf" target="_blank" class="inline-flex items-center text-sm text-amber-600 font-semibold hover:underline">
-                            <i class="fa-solid fa-file-pdf mr-2"></i> Voir la preuve (PDF)
+                    <div class="pt-4 border-t border-slate-100">
+                        <a href="Fiche%20de%20lecture.pdf" target="_blank" class="inline-flex items-center justify-between w-full text-sm text-slate-900 font-semibold group-hover:text-emerald-600 transition">
+                            <span><i class="fa-solid fa-file-pdf text-rose-500 mr-2"></i>Voir la preuve (PDF)</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                         </a>
                     </div>
                 </div>
 
                 <!-- Projet 3 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col justify-between hover:shadow-md transition">
+                <div class="group bg-white rounded-3xl border border-slate-200/80 p-7 flex flex-col justify-between shadow-sm hover:shadow-xl hover:border-indigo-300 transition-all duration-300 hover:-translate-y-1">
                     <div>
-                        <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center text-xl mb-4">
-                            <i class="fa-solid fa-network-wired"></i>
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="w-12 h-12 bg-indigo-500/10 text-indigo-600 rounded-2xl flex items-center justify-center text-xl group-hover:bg-indigo-500 group-hover:text-white transition-colors">
+                                <i class="fa-solid fa-network-wired"></i>
+                            </div>
+                            <span class="text-xs font-mono text-slate-400">03 / RÉSEAU</span>
                         </div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Interconnexion Réseau Cisco</h3>
-                        <p class="text-gray-600 text-sm mb-4">
-                            Architecture multi-routeurs/switches sous Packet Tracer, routage statique/dynamique et validation par ICMP.
+                        <h3 class="text-xl font-bold text-slate-900 mb-3">Interconnexion Réseau Cisco</h3>
+                        <p class="text-slate-600 text-sm leading-relaxed mb-5">
+                            Architecture multi-routeurs et switches sous Packet Tracer, mise en place du routage statique/dynamique et validation de connectivité par ICMP.
                         </p>
+                        <div class="flex flex-wrap gap-1.5 mb-6">
+                            <span class="text-xs font-mono bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg">Cisco IOS</span>
+                            <span class="text-xs font-mono bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg">Routage</span>
+                            <span class="text-xs font-mono bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg">VLAN</span>
+                        </div>
                     </div>
-                    <div class="pt-4 border-t border-gray-100">
-                        <a href="BLOC%202_%20cisco%20packet%20tracer_2.pdf" target="_blank" class="inline-flex items-center text-sm text-amber-600 font-semibold hover:underline">
-                            <i class="fa-solid fa-file-pdf mr-2"></i> Voir la preuve (PDF)
+                    <div class="pt-4 border-t border-slate-100">
+                        <a href="BLOC%202_%20cisco%20packet%20tracer_2.pdf" target="_blank" class="inline-flex items-center justify-between w-full text-sm text-slate-900 font-semibold group-hover:text-indigo-600 transition">
+                            <span><i class="fa-solid fa-file-pdf text-rose-500 mr-2"></i>Voir la preuve (PDF)</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                         </a>
                     </div>
                 </div>
@@ -215,106 +357,210 @@
         </div>
 
         <!-- ONGLET 4 : COMPETENCES -->
-        <div id="competences" class="tab-content hidden max-w-6xl mx-auto">
-            <h2 class="text-3xl font-bold text-gray-900 mb-8 border-l-4 border-amber-500 pl-4">Compétences Techniques</h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                    <h3 class="font-bold text-gray-900 mb-2"><i class="fa-brands fa-linux text-amber-500 mr-2"></i> Systèmes</h3>
-                    <p class="text-sm text-gray-600">Debian/Ubuntu, Windows Server, Active Directory, GPO, DNS, DHCP.</p>
+        <div id="competences" class="tab-content hidden max-w-5xl mx-auto">
+            <div class="mb-10">
+                <span class="text-xs font-mono uppercase tracking-widest text-amber-600 font-semibold">Stack Technique</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">Compétences Systèmes & Réseaux</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm">
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="w-11 h-11 rounded-2xl bg-amber-500/10 text-amber-600 flex items-center justify-center text-lg">
+                            <i class="fa-brands fa-linux"></i>
+                        </span>
+                        <h3 class="text-lg font-bold text-slate-900">Administration Systèmes</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">Linux (Debian / Ubuntu)</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">Windows Server</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">Active Directory & GPO</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">Services DNS / DHCP</span>
+                    </div>
                 </div>
-                <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                    <h3 class="font-bold text-gray-900 mb-2"><i class="fa-solid fa-network-wired text-amber-500 mr-2"></i> Réseaux</h3>
-                    <p class="text-sm text-gray-600">Cisco Packet Tracer, VLANs, Routage, NAT, pfSense, Modèle OSI.</p>
+
+                <div class="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm">
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="w-11 h-11 rounded-2xl bg-indigo-500/10 text-indigo-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-network-wired"></i>
+                        </span>
+                        <h3 class="text-lg font-bold text-slate-900">Réseaux & Infrastructure</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">Configuration Routeurs & Switches</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">Cisco Packet Tracer</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">VLANs & Routage</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">NAT & pfSense</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">Modèle OSI</span>
+                    </div>
                 </div>
-                <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                    <h3 class="font-bold text-gray-900 mb-2"><i class="fa-solid fa-shield-halved text-amber-500 mr-2"></i> Sécurité & BDD</h3>
-                    <p class="text-sm text-gray-600">MariaDB/MySQL, Certificats SSL/TLS, Bash, Cron, Sauvegardes.</p>
+
+                <div class="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm">
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="w-11 h-11 rounded-2xl bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </span>
+                        <h3 class="text-lg font-bold text-slate-900">Sécurité & Bases de données</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">MariaDB / MySQL</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">Certificats SSL / TLS</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">Scripting Bash & Cron</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">Stratégies de sauvegarde</span>
+                    </div>
                 </div>
-                <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                    <h3 class="font-bold text-gray-900 mb-2"><i class="fa-solid fa-headset text-amber-500 mr-2"></i> Outils & Support</h3>
-                    <p class="text-sm text-gray-600">VirtualBox, Hyper-V, Proxmox VE, GLPI, Zabbix/Centreon, Git & GitHub.</p>
+
+                <div class="bg-white p-7 rounded-3xl border border-slate-200/80 shadow-sm">
+                    <div class="flex items-center gap-3 mb-5">
+                        <span class="w-11 h-11 rounded-2xl bg-sky-500/10 text-sky-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-cubes"></i>
+                        </span>
+                        <h3 class="text-lg font-bold text-slate-900">Virtualisation, Supervision & Outils</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">VirtualBox & Hyper-V</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">Proxmox VE</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">GLPI</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">Zabbix / Centreon</span>
+                        <span class="px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">Git & GitHub</span>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- ONGLET 5 : VEILLE TECH -->
-        <div id="veille" class="tab-content hidden max-w-6xl mx-auto">
-            <h2 class="text-3xl font-bold text-gray-900 mb-2 border-l-4 border-amber-500 pl-4">Veille Technologique</h2>
-            <p class="text-gray-600 mb-8">Restitution officielle de la veille technologique (Bloc SIO2) - Épreuve E5.</p>
+        <div id="veille" class="tab-content hidden max-w-5xl mx-auto">
+            <div class="mb-10">
+                <span class="text-xs font-mono uppercase tracking-widest text-amber-600 font-semibold">Bloc SIO2 • Épreuve E5</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">Veille Technologique</h2>
+            </div>
 
-            <div class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm space-y-6">
-                <div>
-                    <span class="text-xs font-semibold uppercase tracking-wider bg-amber-100 text-amber-800 px-3 py-1 rounded-full mb-3 inline-block">Sujet validé : Cybersécurité & IA</span>
-                    <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-3">Comment l'intelligence artificielle peut-elle améliorer le modèle Zero Trust pour détecter les cybermenaces en temps réel et renforcer la protection des systèmes d'information ?</h3>
-                    <p class="text-gray-600 text-sm leading-relaxed">
-                        L'architecture Zero Trust repose sur le principe de vérification permanente (« Never trust, always verify »). Couplée à l'intelligence artificielle (Machine Learning et UEBA), elle permet d'analyser dynamiquement les comportements des utilisateurs et des terminaux afin d'ajuster les accès et de contrer les menaces en temps réel.
+            <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm overflow-hidden">
+                <!-- Bandeau Sujet -->
+                <div class="bg-slate-900 text-white p-8 sm:p-10">
+                    <span class="inline-block text-xs font-mono uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/30 px-3 py-1 rounded-full mb-4">
+                        Sujet validé : Cybersécurité & Intelligence Artificielle
+                    </span>
+                    <h3 class="text-xl sm:text-2xl font-bold leading-snug mb-4">
+                        Comment l'intelligence artificielle peut-elle améliorer le modèle Zero Trust pour détecter les cybermenaces en temps réel et renforcer la protection des systèmes d'information ?
+                    </h3>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                        L'architecture Zero Trust repose sur le principe de vérification permanente (<em class="text-amber-300">« Never trust, always verify »</em>). Couplée à l'intelligence artificielle (Machine Learning et UEBA), elle permet d'analyser dynamiquement les comportements des utilisateurs et des terminaux afin d'ajuster les accès et de contrer les menaces en temps réel.
                     </p>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-gray-200">
-                    <div class="bg-slate-50 p-5 rounded-lg border border-gray-200 shadow-sm">
-                        <h4 class="font-bold text-amber-600 mb-2"><i class="fa-solid fa-toolbox mr-2"></i> Outils de collecte & Paramétrage</h4>
-                        <ul class="text-sm text-gray-600 space-y-2">
-                            <li><strong>Flux RSS :</strong> Centralisation via Feedly (Dossier dédié ANSSI, NIST, ZDNet).</li>
-                            <li><strong>Alertes :</strong> Google Alerts configurées sur les requêtes <em>« Zero Trust » AND « Artificial Intelligence »</em> et <em>« UEBA »</em>.</li>
-                        </ul>
-                    </div>
-                    <div class="bg-slate-50 p-5 rounded-lg border border-gray-200 shadow-sm">
-                        <h4 class="font-bold text-amber-600 mb-2"><i class="fa-solid fa-magnifying-glass-chart mr-2"></i> Analyse & Impacts pro</h4>
-                        <ul class="text-sm text-gray-600 space-y-2">
-                            <li><strong>Analyse (UEBA) :</strong> Détection automatisée des anomalies comportementales (horaires, volumes, géolocalisation).</li>
-                            <li><strong>Avantages / Limites :</strong> Réduction du temps de réaction (MTTR) mais vigilance requise face aux risques d'empoisonnement des modèles d'IA.</li>
-                        </ul>
-                    </div>
-                </div>
+                <div class="p-8 sm:p-10 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/70">
+                            <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-rss text-amber-500"></i>
+                                <span>Outils de collecte & Paramétrage</span>
+                            </h4>
+                            <ul class="text-sm text-slate-600 space-y-2.5">
+                                <li><strong class="text-slate-800">Flux RSS :</strong> Centralisation via Feedly (Dossier dédié ANSSI, NIST, ZDNet).</li>
+                                <li><strong class="text-slate-800">Alertes :</strong> Google Alerts configurées sur <code class="font-mono text-xs bg-white px-1.5 py-0.5 rounded border border-slate-200">« Zero Trust » AND « Artificial Intelligence »</code> et <code class="font-mono text-xs bg-white px-1.5 py-0.5 rounded border border-slate-200">« UEBA »</code>.</li>
+                            </ul>
+                        </div>
 
-                <div class="bg-amber-50 p-5 rounded-lg border border-amber-200">
-                    <h4 class="font-bold text-amber-900 mb-1 text-sm uppercase tracking-wider"><i class="fa-solid fa-lightbulb mr-2"></i> Ce que cette veille m'a apporté</h4>
-                    <p class="text-sm text-amber-800">
-                        Cette activité m'a permis d'automatiser ma collecte d'informations ciblées, de structurer une analyse critique de sources officielles (ANSSI, NIST), et d'appréhender les enjeux cruciaux des infrastructures sécurisées de demain.
-                    </p>
-                </div>
-
-                <div class="pt-4 border-t border-gray-200 flex flex-wrap items-center justify-between gap-4">
-                    <div class="text-xs text-gray-500">
-                        <strong>Sources :</strong> ANSSI, NIST SP 800-207, Gartner. | <strong>Mise à jour :</strong> Novembre 2026
+                        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/70">
+                            <h4 class="font-bold text-slate-900 mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-magnifying-glass-chart text-amber-500"></i>
+                                <span>Analyse & Impacts professionnels</span>
+                            </h4>
+                            <ul class="text-sm text-slate-600 space-y-2.5">
+                                <li><strong class="text-slate-800">Analyse (UEBA) :</strong> Détection automatisée des anomalies comportementales (horaires, volumes, géolocalisation).</li>
+                                <li><strong class="text-slate-800">Avantages / Limites :</strong> Réduction du temps de réaction (MTTR) mais vigilance requise face aux risques d'empoisonnement des modèles d'IA.</li>
+                            </ul>
+                        </div>
                     </div>
-                    <a href="Veille_Technologique.pdf" target="_blank" class="inline-flex items-center text-sm font-semibold bg-amber-500 text-white px-4 py-2 rounded-lg shadow hover:bg-amber-600 transition">
-                        <i class="fa-solid fa-file-pdf mr-2"></i> Consulter la fiche de veille complète (PDF)
-                    </a>
+
+                    <div class="bg-amber-50/80 p-6 rounded-2xl border border-amber-200/80">
+                        <h4 class="font-bold text-amber-950 mb-1.5 text-sm uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-lightbulb text-amber-600"></i>
+                            <span>Bilan & Apports personnels</span>
+                        </h4>
+                        <p class="text-sm text-amber-900 leading-relaxed">
+                            Cette activité m'a permis d'automatiser ma collecte d'informations ciblées, de structurer une analyse critique de sources officielles (ANSSI, NIST), et d'appréhender les enjeux cruciaux des infrastructures sécurisées de demain.
+                        </p>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
+                        <div class="text-xs font-mono text-slate-500">
+                            <strong>Sources :</strong> ANSSI, NIST SP 800-207, Gartner • <strong>Mise à jour :</strong> Novembre 2026
+                        </div>
+                        <a href="Veille_Technologique.pdf" target="_blank" class="inline-flex items-center gap-2 text-sm font-semibold bg-slate-900 text-white px-5 py-3 rounded-xl shadow hover:bg-slate-800 transition">
+                            <i class="fa-solid fa-file-pdf text-amber-400"></i>
+                            <span>Consulter la fiche complète (PDF)</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- ONGLET 6 : CONTACT -->
         <div id="contact" class="tab-content hidden max-w-4xl mx-auto">
-            <h2 class="text-3xl font-bold text-gray-900 mb-8 border-l-4 border-amber-500 pl-4">Me contacter</h2>
-            <form onsubmit="event.preventDefault(); alert('Message envoyé !');" class="bg-white p-8 rounded-xl border border-gray-200 shadow-sm space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Nom</label>
-                    <input type="text" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
+            <div class="mb-10">
+                <span class="text-xs font-mono uppercase tracking-widest text-amber-600 font-semibold">Échanger</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mt-1">Me contacter</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-6">
+                <div class="md:col-span-2 bg-slate-900 text-white p-8 rounded-3xl flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">Coordonnées</h3>
+                        <p class="text-slate-400 text-sm mb-8">Disponible pour toute question concernant mon parcours, mes projets E4 ou une opportunité professionnelle.</p>
+                        <ul class="space-y-4 text-sm">
+                            <li class="flex items-start gap-3">
+                                <i class="fa-solid fa-location-dot text-amber-400 mt-1"></i>
+                                <span class="text-slate-200">2 Chemin Dutré<br>27440 Lisors</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fa-solid fa-phone text-amber-400"></i>
+                                <a href="tel:0766020953" class="text-slate-200 hover:text-amber-400 transition">07.66.02.09.53</a>
+                            </li>
+                            <li class="flex items-center gap-3 break-all">
+                                <i class="fa-solid fa-envelope text-amber-400"></i>
+                                <a href="mailto:damien.picchirilli@laposte.net" class="text-slate-200 hover:text-amber-400 transition">damien.picchirilli@laposte.net</a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">E-mail</label>
-                    <input type="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1">Message</label>
-                    <textarea rows="4" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
-                </div>
-                <button type="submit" class="bg-amber-500 text-white font-medium px-6 py-3 rounded-lg shadow hover:bg-amber-600 transition">Envoyer le message</button>
-            </form>
+
+                <form onsubmit="event.preventDefault(); alert('Message envoyé !');" class="md:col-span-3 bg-white p-8 rounded-3xl border border-slate-200/80 shadow-sm space-y-5">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Nom complet</label>
+                        <input type="text" placeholder="Votre nom" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 focus:outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Adresse e-mail</label>
+                        <input type="email" placeholder="vous@exemple.fr" required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 focus:outline-none transition">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Message</label>
+                        <textarea rows="4" placeholder="Votre message..." required class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500/40 focus:border-amber-500 focus:outline-none transition"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-amber-500/20 transition-all hover:-translate-y-0.5">
+                        Envoyer le message <i class="fa-solid fa-paper-plane ml-2 text-xs"></i>
+                    </button>
+                </form>
+            </div>
         </div>
 
     </main>
 
     <!-- Footer -->
-    <footer class="py-8 border-t border-gray-200 text-center text-sm text-gray-500 bg-white mt-auto">
-        <div class="flex justify-center space-x-6 mb-4">
-            <a href="https://linkedin.com" target="_blank" class="text-gray-400 hover:text-amber-500 text-xl transition"><i class="fa-brands fa-linkedin"></i></a>
-            <a href="https://github.com" target="_blank" class="text-gray-400 hover:text-gray-900 text-xl transition"><i class="fa-brands fa-github"></i></a>
+    <footer class="py-8 border-t border-slate-200/80 bg-white/70 backdrop-blur-sm mt-auto">
+        <div class="max-w-5xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+            <p>&copy; 2026 <strong class="text-slate-800">Damien Picchirilli</strong> — BTS SIO SISR</p>
+            <div class="flex items-center gap-4">
+                <a href="https://linkedin.com" target="_blank" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-900 text-slate-600 hover:text-white flex items-center justify-center transition">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+                <a href="https://github.com" target="_blank" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-900 text-slate-600 hover:text-white flex items-center justify-center transition">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+            </div>
         </div>
-        &copy; 2026 Damien Picchirilli — BTS SIO SISR. Tous droits réservés.
     </footer>
 
 </body>
